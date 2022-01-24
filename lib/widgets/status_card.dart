@@ -1,4 +1,5 @@
-import 'package:divide_ai/enums/transaction_type.dart';
+import 'package:divide_ai/enums/transaction_type_enum.dart';
+import 'package:divide_ai/helpers/transaction_type_helper.dart';
 import 'package:flutter/material.dart';
 
 class StatusCard extends StatelessWidget {
@@ -15,24 +16,6 @@ class StatusCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Color getBackgroundColor () {
-      switch (transactionType) {
-        case TransactionType.spent:
-          return const Color(0xFFFF1865);
-        case TransactionType.income:
-          return Theme.of(context).primaryColor;
-      }
-    }
-
-    IconData getIcon() {
-      switch (transactionType) {
-        case TransactionType.spent:
-          return Icons.arrow_circle_down_rounded;
-        case TransactionType.income:
-          return Icons.arrow_circle_up_rounded;
-      }
-    }
-
     return Card(
       elevation: 0,
       child: Container(
@@ -42,7 +25,10 @@ class StatusCard extends StatelessWidget {
         ),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(18),
-          color: getBackgroundColor(),
+          color: TransactionTypeHelper.getColorByTransactionType(
+            context,
+            transactionType,
+          ),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -50,7 +36,7 @@ class StatusCard extends StatelessWidget {
             Align(
               alignment: Alignment.centerLeft,
               child: Icon(
-                getIcon(),
+                TransactionTypeHelper.getIconByTransactionType(transactionType),
                 size: 40,
               ),
             ),
