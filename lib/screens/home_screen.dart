@@ -1,8 +1,10 @@
 import 'package:divide_ai/enums/transaction_type_enum.dart';
+import 'package:divide_ai/providers/authentication_provider.dart';
 import 'package:divide_ai/screens/new_bill_screen.dart';
 import 'package:divide_ai/widgets/status_card.dart';
 import 'package:divide_ai/widgets/transaction_tile.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -17,19 +19,47 @@ class HomeScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              const Text(
-                'Boa tarde,',
-                style: TextStyle(
-                  fontSize: 18,
-                ),
-              ),
-              const Text(
-                'Ruan',
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  height: 1,
-                ),
+              Consumer<AuthenticationProvider>(
+                builder: (context, authentication, child) {
+                  return Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      if (authentication.currentUser!.firebaseUser.photoURL != null) ...[
+                        CircleAvatar(
+                          backgroundImage: NetworkImage(authentication.currentUser!.firebaseUser.photoURL!),
+                          backgroundColor: Colors.grey[200],
+                          maxRadius: 22,
+                        ),
+                      ],
+                      const SizedBox(width: 4,),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            const Text(
+                              'Boa tarde,', // TODO: change message dynamicly
+                              style: TextStyle(
+                                fontSize: 18,
+                              ),
+                            ),
+                            Text(
+                              authentication.currentUser!.firebaseUser.displayName!,
+                              style: const TextStyle(
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold,
+                                height: 1,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      IconButton(
+                        onPressed: authentication.signOut,
+                        icon: const Icon(Icons.logout),
+                      ),
+                    ],
+                  );
+                },
               ),
               const SizedBox(
                 height: 20,
@@ -40,7 +70,7 @@ class HomeScreen extends StatelessWidget {
                     flex: 1,
                     child: StatusCard(
                       transactionType: TransactionType.income,
-                      amount: 999.99,
+                      amount: 145.4,
                       label: 'A receber',
                     ),
                   ),
@@ -51,7 +81,7 @@ class HomeScreen extends StatelessWidget {
                     flex: 1,
                     child: StatusCard(
                       transactionType: TransactionType.spent,
-                      amount: 57.5,
+                      amount: 78,
                       label: 'A pagar',
                     ),
                   ),

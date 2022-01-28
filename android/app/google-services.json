@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "942280946382",
+    "project_id": "divide-ai-afd77",
+    "storage_bucket": "divide-ai-afd77.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:942280946382:android:796e8e5d0426ead37b169f",
+        "android_client_info": {
+          "package_name": "br.com.ruanscherer.divide_ai"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "942280946382-faij0tpgva3vpuia26viedm388lrcqb6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "br.com.ruanscherer.divide_ai",
+            "certificate_hash": "3a89452e910169399e9cd5ade6bd0e8489738f9e"
+          }
+        },
+        {
+          "client_id": "942280946382-d2j8mt2ad9ua5d4k0ktt83h6io250art.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBnUzerI92KYa7Faz1F-qZFn-VmjK2NEOU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "942280946382-d2j8mt2ad9ua5d4k0ktt83h6io250art.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

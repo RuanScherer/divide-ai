@@ -1,7 +1,9 @@
+import 'package:divide_ai/providers/authentication_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -86,6 +88,8 @@ class LoginScreen extends StatelessWidget {
   }
 
   Widget _buildLoginPage(BuildContext context) {
+    final AuthenticationProvider authenticationProvider = Provider.of<AuthenticationProvider>(context);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -154,7 +158,9 @@ class LoginScreen extends StatelessWidget {
                 height: 10,
               ),
               TextButton(
-                onPressed: () {},
+                onPressed: () {
+                  authenticationProvider.signInWithGoogle();
+                },
                 style: ButtonStyle(
                   shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                     RoundedRectangleBorder(
@@ -191,6 +197,16 @@ class LoginScreen extends StatelessWidget {
                         ),
                       ),
                     ],
+                  ),
+                ),
+              ),
+              Container(
+                margin: const EdgeInsets.only(top: 6, left: 4, right: 4),
+                child: Text(
+                  'Não é necessário ter uma conta no Divide Aí para entrar com o Google.',
+                  style: TextStyle(
+                    color: Colors.grey[600],
+                    height: 1.1,
                   ),
                 ),
               ),
