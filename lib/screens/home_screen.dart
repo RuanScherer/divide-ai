@@ -24,14 +24,18 @@ class HomeScreen extends StatelessWidget {
                   return Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      if (authentication.currentUser!.firebaseUser.photoURL != null) ...[
+                      if (authentication.currentUser!.firebaseUser.photoURL !=
+                          null) ...[
                         CircleAvatar(
-                          backgroundImage: NetworkImage(authentication.currentUser!.firebaseUser.photoURL!),
+                          backgroundImage: NetworkImage(authentication
+                              .currentUser!.firebaseUser.photoURL!),
                           backgroundColor: Colors.grey[200],
                           maxRadius: 22,
                         ),
                       ],
-                      const SizedBox(width: 4,),
+                      const SizedBox(
+                        width: 4,
+                      ),
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -43,7 +47,9 @@ class HomeScreen extends StatelessWidget {
                               ),
                             ),
                             Text(
-                              authentication.currentUser!.firebaseUser.displayName!,
+                              authentication
+                                      .currentUser!.firebaseUser.displayName ??
+                                  '@${authentication.currentUser!.username ?? ''}',
                               style: const TextStyle(
                                 fontSize: 24,
                                 fontWeight: FontWeight.bold,

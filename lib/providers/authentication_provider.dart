@@ -1,4 +1,5 @@
 import 'package:divide_ai/globals/globals.dart';
+import 'package:divide_ai/helpers/snackbar_helper.dart';
 import 'package:divide_ai/services/user_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -66,5 +67,43 @@ class AuthenticationProvider extends ChangeNotifier {
     await _auth.signOut();
     _currentUser = null;
     notifyListeners();
+  }
+
+  void createUserWithEmailAndPassword(String email, String password) async {
+    try {
+      SnackbarHelper.showDefaultSnackbar(text: 'Cadastrando usuário...');
+      await _auth.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+
+      SnackbarHelper.dismissCurrentSnackbar();
+      SnackbarHelper.showDefaultSnackbar(
+        text: 'Usuário cadastrado com sucesso!',
+      );
+      navigatorKey.currentState?.pop();
+    } on FirebaseAuthException catch (exception) {
+      late String errorMessage;
+      switch (exception.code) {
+        case 'weak-password':
+          errorMessage = 'A senha informada é muito fraca.';
+          break;
+        case 'email-already-in-use':
+          errorMessage = 'Já existe uma conta para esse endereço de e-mail.';
+          break;
+        case 'invalid-email':
+          errorMessage = 'O endereço de e-mail informado é inválido.';
+          break;
+        default:
+          errorMessage = 'Falha ao cadastrar usuário, tente novamente.';
+          break;
+      }
+
+      SnackbarHelper.showDefaultSnackbar(text: errorMessage);
+    } catch (exception) {
+      SnackbarHelper.showDefaultSnackbar(
+        text: 'Falha ao cadastrar usuário, tente novamente.',
+      );
+    }
   }
 }

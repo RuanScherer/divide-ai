@@ -1,4 +1,5 @@
 import 'package:divide_ai/providers/authentication_provider.dart';
+import 'package:divide_ai/screens/register_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -67,6 +68,11 @@ class LoginScreen extends StatelessWidget {
           ),
           Column(
             children: const [
+              Icon(
+                Icons.arrow_upward_rounded,
+                color: Colors.white,
+                size: 36,
+              ),
               Text(
                 'Começe agora deslizando',
                 style: TextStyle(
@@ -75,11 +81,6 @@ class LoginScreen extends StatelessWidget {
                   color: Colors.white,
                 ),
               ),
-              Icon(
-                Icons.arrow_downward_rounded,
-                color: Colors.white,
-                size: 36,
-              )
             ],
           )
         ],
@@ -158,9 +159,7 @@ class LoginScreen extends StatelessWidget {
                 height: 10,
               ),
               TextButton(
-                onPressed: () {
-                  authenticationProvider.signInWithGoogle();
-                },
+                onPressed: authenticationProvider.signInWithGoogle,
                 style: ButtonStyle(
                   shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                     RoundedRectangleBorder(
@@ -235,7 +234,13 @@ class LoginScreen extends StatelessWidget {
                 height: 16,
               ),
               TextButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => RegisterScreen(),
+                    ),
+                  );
+                },
                 style: ButtonStyle(
                   shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                     RoundedRectangleBorder(

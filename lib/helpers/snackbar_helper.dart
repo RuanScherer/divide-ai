@@ -26,4 +26,8 @@ class SnackbarHelper {
       return const Text('');
     }
   }
+
+  static void dismissCurrentSnackbar() {
+    snackbarKey.currentState?.hideCurrentSnackBar();
+  }
 }
