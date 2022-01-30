@@ -1,13 +1,13 @@
 import 'package:divide_ai/providers/authentication_provider.dart';
-import 'package:divide_ai/providers/register_provider.dart';
+import 'package:divide_ai/providers/email_and_password_sign_in_provider.dart';
 import 'package:divide_ai/widgets/default_text_form_field.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class RegisterScreen extends StatelessWidget {
+class EmailAndPasswordSignInScreen extends StatelessWidget {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  RegisterScreen({Key? key}) : super(key: key);
+  EmailAndPasswordSignInScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -15,8 +15,8 @@ class RegisterScreen extends StatelessWidget {
       body: SafeArea(
         child: MultiProvider(
           providers: [
-            ListenableProvider<RegisterProvider>(
-              create: (_) => RegisterProvider(),
+            ListenableProvider<EmailAndPasswordSignInProvider>(
+              create: (_) => EmailAndPasswordSignInProvider(),
             ),
             ListenableProvider<AuthenticationProvider>(
               create: (_) => AuthenticationProvider(),
@@ -30,12 +30,13 @@ class RegisterScreen extends StatelessWidget {
                 padding: const EdgeInsets.all(22),
                 child: Form(
                   key: _formKey,
-                  child: Consumer<RegisterProvider>(
-                    builder: (context, registerProvider, child) => Column(
+                  child: Consumer<EmailAndPasswordSignInProvider>(
+                    builder: (context, emailAndPasswordSignInProvider, child) =>
+                        Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         const Text(
-                          'Cadastre-se no',
+                          'Entre no',
                           style: TextStyle(fontSize: 30),
                           textAlign: TextAlign.center,
                         ),
@@ -52,10 +53,11 @@ class RegisterScreen extends StatelessWidget {
                           height: 30,
                         ),
                         DefaultTextFormField(
-                          validator: registerProvider.validateEmail,
+                          validator:
+                              emailAndPasswordSignInProvider.validateEmail,
                           onChanged: (text) {
                             _formKey.currentState?.validate();
-                            registerProvider.setEmail(text);
+                            emailAndPasswordSignInProvider.setEmail(text);
                           },
                           keyboardType: TextInputType.emailAddress,
                           hintText: 'E-mail',
@@ -64,11 +66,12 @@ class RegisterScreen extends StatelessWidget {
                           height: 20,
                         ),
                         DefaultTextFormField(
-                          validator: registerProvider.validatePassword,
+                          validator: emailAndPasswordSignInProvider.validatePassword,
                           onChanged: (text) {
                             _formKey.currentState?.validate();
-                            registerProvider.setPassword(text);
+                            emailAndPasswordSignInProvider.setPassword(text);
                           },
+                          autofocus: false,
                           obscureText: true,
                           hintText: 'Senha',
                         ),
@@ -116,36 +119,38 @@ class RegisterScreen extends StatelessWidget {
                       ),
                       Expanded(
                         flex: 1,
-                        child: Consumer2<RegisterProvider, AuthenticationProvider>(
-                          builder: (context, registerProvider, authenticationProvider, child) {
-                            return InkWell(
-                              onTap: () {
-                                if (registerProvider.isEmailValid &&
-                                    registerProvider.isPasswordValid) {
-                                  Provider.of<AuthenticationProvider>(
-                                    context,
-                                    listen: false,
-                                  ).createUserWithEmailAndPassword(
-                                    registerProvider.email!,
-                                    registerProvider.password!,
-                                  );
-                                }
-                              },
-                              child: const Padding(
-                                padding: EdgeInsets.symmetric(
-                                  horizontal: 6,
-                                  vertical: 15,
-                                ),
-                                child: Text(
-                                  'CONTINUAR',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
+                        child: Consumer2<EmailAndPasswordSignInProvider,
+                            AuthenticationProvider>(
+                            builder: (context, emailAndPasswordSignInProvider,
+                                authenticationProvider, child) {
+                              return InkWell(
+                                onTap: () {
+                                  if (emailAndPasswordSignInProvider.isEmailValid &&
+                                      emailAndPasswordSignInProvider.isPasswordValid) {
+                                    Provider.of<AuthenticationProvider>(
+                                      context,
+                                      listen: false,
+                                    ).signInWithEmailAndPassword(
+                                      emailAndPasswordSignInProvider.email!,
+                                      emailAndPasswordSignInProvider.password!,
+                                    );
+                                  }
+                                },
+                                child: const Padding(
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: 6,
+                                    vertical: 15,
+                                  ),
+                                  child: Text(
+                                    'CONTINUAR',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                   ),
                                 ),
-                              ),
-                            );
-                          }
+                              );
+                            }
                         ),
                       ),
                     ],

@@ -1,5 +1,6 @@
 import 'package:divide_ai/providers/authentication_provider.dart';
 import 'package:divide_ai/providers/create_username_provider.dart';
+import 'package:divide_ai/widgets/default_text_form_field.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -51,26 +52,13 @@ class _CreateUsernameScreenState extends State<CreateUsernameScreen> {
                     Consumer<CreateUsernameProvider>(
                       builder: (context, createUsernameProvider, child) => Form(
                         key: _formKey,
-                        child: TextFormField(
+                        child: DefaultTextFormField(
                           validator: createUsernameProvider.validateUsername,
                           onChanged: (text) {
                             _formKey.currentState?.validate();
                             createUsernameProvider.setUsername(text);
                           },
-                          textAlign: TextAlign.center,
-                          autofocus: true,
-                          cursorColor: Theme.of(context).primaryColor,
-                          style: const TextStyle(fontSize: 20),
-                          decoration: InputDecoration(
-                            hintText: 'Ex.: joao_vitor12',
-                            hintStyle: TextStyle(color: Colors.grey[500]),
-                            focusedBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(
-                                color: Theme.of(context).primaryColor,
-                                width: 2,
-                              ),
-                            ),
-                          ),
+                          hintText: 'Ex.: joao_vitor12',
                         ),
                       ),
                     ),

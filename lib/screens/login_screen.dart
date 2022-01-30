@@ -1,10 +1,14 @@
 import 'package:divide_ai/providers/authentication_provider.dart';
 import 'package:divide_ai/screens/register_screen.dart';
+import 'package:divide_ai/widgets/default_button.dart';
+import 'package:divide_ai/widgets/named_divider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
+
+import 'email_and_password_sign_in_screen.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -20,7 +24,7 @@ class LoginScreen extends StatelessWidget {
           child: PageView(
             scrollDirection: Axis.vertical,
             children: [
-              _buildFirstOnboardPage(context),
+              _buildWelcomePage(context),
               _buildLoginPage(context),
             ],
           ),
@@ -29,7 +33,7 @@ class LoginScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildFirstOnboardPage(BuildContext context) {
+  Widget _buildWelcomePage(BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 26, vertical: 36),
       color: Theme.of(context).primaryColor,
@@ -115,89 +119,38 @@ class LoginScreen extends StatelessWidget {
               const SizedBox(
                 height: 20,
               ),
-              TextButton(
-                onPressed: () {},
-                style: ButtonStyle(
-                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                    RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(14),
+              DefaultButton(
+                text: 'Entrar com e-mail',
+                leading: const Icon(
+                  Icons.email_outlined,
+                  color: Colors.black,
+                ),
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => EmailAndPasswordSignInScreen(),
                     ),
-                  ),
-                  backgroundColor:
-                      MaterialStateProperty.all<Color>(Colors.grey[200]!),
-                  overlayColor:
-                      MaterialStateProperty.all<Color>(Colors.grey[300]!),
-                ),
-                child: Container(
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 8,
-                    horizontal: 12,
-                  ),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: const [
-                      Icon(
-                        Icons.email_outlined,
-                        color: Colors.black,
-                      ),
-                      SizedBox(
-                        width: 10,
-                      ),
-                      Text(
-                        'Entrar com e-mail',
-                        style: TextStyle(
-                          fontSize: 18,
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+                  );
+                },
               ),
               const SizedBox(
                 height: 10,
               ),
-              TextButton(
+              DefaultButton(
+                text: 'Entrar com Google',
+                textStyle: const TextStyle(
+                  fontSize: 18,
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
+                backgroundColor: Colors.blueAccent,
+                overlayColor: Colors.white30,
+                leading: const FaIcon(
+                  FontAwesomeIcons.google,
+                  color: Colors.white,
+                  size: 22,
+                ),
                 onPressed: authenticationProvider.signInWithGoogle,
-                style: ButtonStyle(
-                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                    RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(14),
-                    ),
-                  ),
-                  backgroundColor:
-                      MaterialStateProperty.all<Color>(Colors.blueAccent),
-                  overlayColor:
-                      MaterialStateProperty.all<Color>(Colors.white30),
-                ),
-                child: Container(
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 8,
-                    horizontal: 12,
-                  ),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: const [
-                      FaIcon(
-                        FontAwesomeIcons.google,
-                        color: Colors.white,
-                        size: 22,
-                      ),
-                      SizedBox(
-                        width: 10,
-                      ),
-                      Text(
-                        'Entrar com Google',
-                        style: TextStyle(
-                          fontSize: 18,
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
               ),
               Container(
                 margin: const EdgeInsets.only(top: 6, left: 4, right: 4),
@@ -212,28 +165,24 @@ class LoginScreen extends StatelessWidget {
               const SizedBox(
                 height: 16,
               ),
-              Row(
-                children: [
-                  Expanded(
-                    child: Divider(
-                      color: Colors.grey[500],
-                    ),
-                  ),
-                  const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 8),
-                    child: Text('ou'),
-                  ),
-                  Expanded(
-                    child: Divider(
-                      color: Colors.grey[500],
-                    ),
-                  ),
-                ],
-              ),
+              const NamedDivider(text: 'ou',),
               const SizedBox(
                 height: 16,
               ),
-              TextButton(
+              DefaultButton(
+                text: 'Cadastre-se',
+                textStyle: const TextStyle(
+                  fontSize: 18,
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
+                trailing: const FaIcon(
+                  FontAwesomeIcons.arrowRight,
+                  color: Colors.white,
+                  size: 20,
+                ),
+                backgroundColor: Theme.of(context).primaryColor.withOpacity(0.9),
+                overlayColor: Colors.white30,
                 onPressed: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
@@ -241,45 +190,6 @@ class LoginScreen extends StatelessWidget {
                     ),
                   );
                 },
-                style: ButtonStyle(
-                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                    RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(14),
-                    ),
-                  ),
-                  backgroundColor: MaterialStateProperty.all<Color>(
-                      Theme.of(context).primaryColor.withOpacity(0.9)),
-                  overlayColor:
-                      MaterialStateProperty.all<Color>(Colors.white30),
-                ),
-                child: Container(
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 8,
-                    horizontal: 12,
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: const [
-                      Text(
-                        'Cadastre-se',
-                        style: TextStyle(
-                          fontSize: 18,
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      SizedBox(
-                        width: 10,
-                      ),
-                      FaIcon(
-                        FontAwesomeIcons.arrowRight,
-                        color: Colors.white,
-                        size: 20,
-                      ),
-                    ],
-                  ),
-                ),
               ),
             ],
           ),

@@ -63,6 +63,25 @@ class AuthenticationProvider extends ChangeNotifier {
     }
   }
 
+  void signInWithEmailAndPassword(String email, String password) async {
+    try {
+      await _auth.signInWithEmailAndPassword(email: email, password: password);
+      navigatorKey.currentState?.pop();
+    } on FirebaseAuthException catch (exception) {
+      if (exception.code == 'user-not-found') {
+        SnackbarHelper.showDefaultSnackbar(text: 'Usuário não encontrado.');
+      } else {
+        SnackbarHelper.showDefaultSnackbar(
+          text: 'Dados inválidos, tente novamente.',
+        );
+      }
+    } catch(exception) {
+      SnackbarHelper.showDefaultSnackbar(
+        text: 'Falha ao entrar no Divide Aí, tente novamente.',
+      );
+    }
+  }
+
   void signOut() async {
     await _auth.signOut();
     _currentUser = null;

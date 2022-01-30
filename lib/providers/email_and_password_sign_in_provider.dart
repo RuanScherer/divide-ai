@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:divide_ai/validators/email_validator.dart' as email_validator;
+import 'package:divide_ai/validators/email_validator.dart'as email_validator;
 import 'package:divide_ai/validators/password_validator.dart' as password_validator;
 
-class RegisterProvider extends ChangeNotifier {
+class EmailAndPasswordSignInProvider extends ChangeNotifier {
   String? _email;
   String? _password;
 
@@ -38,7 +38,7 @@ class RegisterProvider extends ChangeNotifier {
   }
 
   String? validatePassword(String? password) {
-    String? validationMessage = password_validator.validatePassword(email);
+    String? validationMessage = password_validator.validatePassword(password);
     if (validationMessage == null) {
       _isPasswordValid = true;
     } else {
