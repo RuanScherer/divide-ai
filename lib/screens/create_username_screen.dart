@@ -27,53 +27,76 @@ class _CreateUsernameScreenState extends State<CreateUsernameScreen> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Padding(
-                padding: const EdgeInsets.all(22),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    const Text(
-                      'Qual será sua',
-                      style: TextStyle(fontSize: 30),
-                      textAlign: TextAlign.center,
-                    ),
-                    const Text(
-                      'tag de usuário?',
-                      style: TextStyle(
-                        fontSize: 30,
-                        height: 1.3,
-                        fontWeight: FontWeight.bold,
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.all(22),
+                    child: Form(
+                      key: _formKey,
+                      child: Consumer<CreateUsernameProvider>(
+                        builder: (context, createUsernameProvider, child) {
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              const Text(
+                                'Como os outros',
+                                style: TextStyle(
+                                  fontSize: 30,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                              const Text(
+                                'irão te ver?',
+                                style: TextStyle(
+                                  fontSize: 30,
+                                  height: 1.3,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                              const SizedBox(
+                                height: 30,
+                              ),
+                              DefaultTextFormField(
+                                validator: createUsernameProvider.validateName,
+                                onChanged: (text) {
+                                  createUsernameProvider.setName(text);
+                                  _formKey.currentState?.validate();
+                                },
+                                textCapitalization: TextCapitalization.words,
+                                labelText: 'Nome',
+                                value: createUsernameProvider.name ?? '',
+                              ),
+                              const SizedBox(
+                                height: 20,
+                              ),
+                              DefaultTextFormField(
+                                validator: createUsernameProvider.validateUsername,
+                                onChanged: (text) {
+                                  createUsernameProvider.setUsername(text);
+                                  _formKey.currentState?.validate();
+                                },
+                                labelText: 'Tag de usuário',
+                                hintText: 'Ex.: joao_vitor12',
+                                value: createUsernameProvider.username ?? '',
+                              ),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              Text(
+                                'Seus amigos poderão te encontrar facilmente por essa tag. Ah, e pra isso ela precisa ser única ;)',
+                                style: TextStyle(
+                                  color: Colors.grey[600],
+                                  fontSize: 14,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                            ],
+                          );
+                        },
                       ),
-                      textAlign: TextAlign.center,
                     ),
-                    const SizedBox(
-                      height: 30,
-                    ),
-                    Consumer<CreateUsernameProvider>(
-                      builder: (context, createUsernameProvider, child) => Form(
-                        key: _formKey,
-                        child: DefaultTextFormField(
-                          validator: createUsernameProvider.validateUsername,
-                          onChanged: (text) {
-                            _formKey.currentState?.validate();
-                            createUsernameProvider.setUsername(text);
-                          },
-                          hintText: 'Ex.: joao_vitor12',
-                        ),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    Text(
-                      'Seus amigos poderão te encontrar facilmente por essa tag. Ah, e pra isso ela precisa ser única ;)',
-                      style: TextStyle(
-                        color: Colors.grey[600],
-                        fontSize: 14,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                  ],
+                  ),
                 ),
               ),
               Container(

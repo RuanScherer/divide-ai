@@ -18,6 +18,13 @@ class AuthenticationProvider extends ChangeNotifier {
     _auth.authStateChanges().listen(validateAuthentication);
   }
 
+  void setName(String name) {
+    if (_currentUser != null) {
+      _currentUser!.name = name;
+      notifyListeners();
+    }
+  }
+
   void setUsername(String username) {
     if (_currentUser != null) {
       _currentUser!.username = username;
@@ -30,7 +37,8 @@ class AuthenticationProvider extends ChangeNotifier {
       final storedUser = await _userService.findUserByFirebaseUserUid(user.uid);
       _currentUser = divide_ai_user.User(
         firebaseUser: user,
-        username: storedUser != null ? storedUser['username'] : null,
+        name: storedUser?.name,
+        username: storedUser?.username,
       );
     } else {
       _currentUser = null;

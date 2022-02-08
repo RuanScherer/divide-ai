@@ -1,7 +1,24 @@
+import 'package:divide_ai/enums/bill_creation_step_enum.dart';
+import 'package:divide_ai/globals/globals.dart';
+import 'package:divide_ai/models/participant.dart';
+import 'package:divide_ai/providers/bill_provider.dart';
+import 'package:divide_ai/widgets/default_button.dart';
+import 'package:divide_ai/widgets/default_text_form_field.dart';
+import 'package:divide_ai/widgets/delegates/participants_delegate.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-class NewBillScreen extends StatelessWidget {
+class NewBillScreen extends StatefulWidget {
   const NewBillScreen({Key? key}) : super(key: key);
+
+  @override
+  State<NewBillScreen> createState() => _NewBillScreenState();
+}
+
+class _NewBillScreenState extends State<NewBillScreen> {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  BillCreationStep _step = BillCreationStep.eventNameQuestion;
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +30,7 @@ class NewBillScreen extends StatelessWidget {
           Align(
             alignment: Alignment.center,
             child: Text(
-              '01',
+              (_step.index + 1).toString().padLeft(2, '0'),
               style: TextStyle(
                 color: Theme.of(context).primaryColor,
                 fontWeight: FontWeight.bold,
@@ -38,7 +55,7 @@ class NewBillScreen extends StatelessWidget {
           Align(
             alignment: Alignment.center,
             child: Text(
-              '03',
+              BillCreationStep.values.length.toString().padLeft(2, '0'),
               style: TextStyle(
                 color: Colors.grey[700],
                 fontWeight: FontWeight.bold,
@@ -51,82 +68,117 @@ class NewBillScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(22),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: _buildParticipantsQuestion(context),
-            ),
-          ),
-          Container(
-            decoration: BoxDecoration(
-              border: Border.symmetric(
-                horizontal: BorderSide(
-                  color: Colors.grey[300]!,
-                  width: 2,
+      body: ChangeNotifierProvider(
+        create: (_) => BillProvider(),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(22),
+              child: Form(
+                key: _formKey,
+                child: Consumer<BillProvider>(
+                  builder: (context, billProvider, child) {
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: _buildCurrentQuestion(context, billProvider),
+                    );
+                  },
                 ),
               ),
             ),
-            child: IntrinsicHeight(
-              child: Row(
-                children: [
-                  Expanded(
-                    flex: 1,
-                    child: InkWell(
-                      onTap: () {
-                        Navigator.of(context).pop();
-                      },
-                      child: const Padding(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: 6,
-                          vertical: 15,
-                        ),
-                        child: Text(
-                          'VOLTAR',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  Container(
+            Container(
+              decoration: BoxDecoration(
+                border: Border.symmetric(
+                  horizontal: BorderSide(
+                    color: Colors.grey[300]!,
                     width: 2,
-                    color: Colors.grey[300],
                   ),
-                  Expanded(
-                    flex: 1,
-                    child: InkWell(
-                      onTap: () {},
-                      child: const Padding(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: 6,
-                          vertical: 15,
-                        ),
-                        child: Text(
-                          'CONTINUAR',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
+                ),
+              ),
+              child: IntrinsicHeight(
+                child: Row(
+                  children: [
+                    Expanded(
+                      flex: 1,
+                      child: InkWell(
+                        onTap: _onBackButtonPressed,
+                        child: const Padding(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 6,
+                            vertical: 15,
+                          ),
+                          child: Text(
+                            'VOLTAR',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ),
                       ),
                     ),
-                  ),
-                ],
+                    Container(
+                      width: 2,
+                      color: Colors.grey[300],
+                    ),
+                    Expanded(
+                      flex: 1,
+                      child: Consumer<BillProvider>(
+                        builder: (context, billProvider, child) {
+                          return InkWell(
+                            onTap: billProvider.isStepValidToAdvance(_step)
+                                ? () => _onContinueButtonPressed(billProvider)
+                                : null,
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 6,
+                                vertical: 15,
+                              ),
+                              child: Text(
+                                'CONTINUAR',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color:
+                                      billProvider.isStepValidToAdvance(_step)
+                                          ? null
+                                          : Colors.grey[500],
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
 
-  List<Widget> _buildEventNameQuestion(BuildContext context) {
+  List<Widget> _buildCurrentQuestion(
+    BuildContext context,
+    BillProvider billProvider,
+  ) {
+    switch (_step) {
+      case BillCreationStep.eventNameQuestion:
+        return _buildEventNameQuestion(context, billProvider);
+      case BillCreationStep.participantsQuestion:
+        return _buildParticipantsQuestion(context, billProvider);
+      default:
+        return [];
+    }
+  }
+
+  List<Widget> _buildEventNameQuestion(
+    BuildContext context,
+    BillProvider billProvider,
+  ) {
     return [
       const Text(
         'Qual o nome',
@@ -144,29 +196,24 @@ class NewBillScreen extends StatelessWidget {
       const SizedBox(
         height: 30,
       ),
-      TextFormField(
-        textAlign: TextAlign.center,
-        autofocus: true,
-        cursorColor: Theme.of(context).primaryColor,
+      DefaultTextFormField(
+        validator: billProvider.validateEventName,
+        onChanged: (text) {
+          billProvider.setEventName(text);
+          _formKey.currentState?.validate();
+        },
         textCapitalization: TextCapitalization.sentences,
-        style: const TextStyle(fontSize: 20),
-        decoration: InputDecoration(
-          hintText: 'Ex.: Churrasco',
-          hintStyle: TextStyle(
-              color: Colors.grey[500]
-          ),
-          focusedBorder: UnderlineInputBorder(
-            borderSide: BorderSide(
-              color: Theme.of(context).primaryColor,
-              width: 2,
-            ),
-          ),
-        ),
+        labelText: 'Nome do evento',
+        hintText: 'Ex.: Churrasco',
+        value: billProvider.eventName ?? '',
       ),
     ];
   }
 
-  List<Widget> _buildParticipantsQuestion(BuildContext context) {
+  List<Widget> _buildParticipantsQuestion(
+    BuildContext context,
+    BillProvider billProvider,
+  ) {
     return [
       const Text(
         'Com quem',
@@ -184,38 +231,95 @@ class NewBillScreen extends StatelessWidget {
       const SizedBox(
         height: 30,
       ),
-      TextFormField(
-        textAlign: TextAlign.center,
-        autofocus: true,
-        cursorColor: Theme.of(context).primaryColor,
-        textCapitalization: TextCapitalization.sentences,
-        style: const TextStyle(fontSize: 20),
-        decoration: InputDecoration(
-          hintText: 'Digite um nome',
-          hintStyle: TextStyle(
-              color: Colors.grey[500]
-          ),
-          focusedBorder: UnderlineInputBorder(
-            borderSide: BorderSide(
-              color: Theme.of(context).primaryColor,
-              width: 2,
-            ),
-          ),
+      DefaultButton(
+        onPressed: () async {
+          String? participantJSONString = await showSearch(
+            context: context,
+            delegate: ParticipantsDelegate(),
+          );
+
+          if (participantJSONString != null &&
+              participantJSONString.isNotEmpty) {
+            billProvider.addParticipant(
+              Participant.fromJSONString(participantJSONString),
+            );
+          }
+        },
+        backgroundColor: Colors.grey[200],
+        overlayColor: Colors.grey[300]!,
+        text: 'Adicionar participante',
+        leading: const Icon(
+          Icons.add,
+          color: Colors.black,
         ),
       ),
-      const SizedBox(height: 30,),
-      const Text(
-        'RECENTES',
-        style: TextStyle(
-          fontWeight: FontWeight.bold,
+      const SizedBox(
+        height: 20,
+      ),
+      SingleChildScrollView(
+        child: Wrap(
+          spacing: 6,
+          alignment: WrapAlignment.center,
+          children: billProvider.participants.map((participant) {
+            return Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Chip(
+                  avatar: CircleAvatar(
+                    backgroundColor: Colors.grey[500],
+                    backgroundImage: participant.avatarUrl != null
+                        ? NetworkImage(participant.avatarUrl!)
+                        : null,
+                  ),
+                  label: Text(participant.name!),
+                  labelStyle: const TextStyle(fontSize: 16),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 6,
+                  ),
+                  backgroundColor:
+                      Theme.of(context).primaryColor.withOpacity(.15),
+                  deleteIcon: const Icon(
+                    Icons.close,
+                    size: 18,
+                  ),
+                  onDeleted: () => billProvider.removeParticipant(participant),
+                  deleteButtonTooltipMessage: 'Remover',
+                ),
+              ],
+            );
+          }).toList(),
         ),
       ),
-      // ListView.builder(
-      //   itemCount: 1,
-      //   itemBuilder: (context, index) {
-      //     return Text('incrivel');
-      //   },
-      // ),
+      const SizedBox(
+        height: 20,
+      ),
     ];
+  }
+
+  void _onBackButtonPressed() {
+    bool isFirstStep = _step.index == 0;
+    if (isFirstStep) {
+      navigatorKey.currentState?.pop();
+    } else {
+      _goToPreviousStep();
+    }
+  }
+
+  void _goToPreviousStep() {
+    setState(() {
+      _step = BillCreationStep.values[_step.index - 1];
+    });
+  }
+
+  void _onContinueButtonPressed(BillProvider billProvider) {
+    bool isLastStep = _step.index == BillCreationStep.values.length - 1;
+    if (!isLastStep) {
+      setState(() {
+        _step = BillCreationStep.values[_step.index + 1];
+      });
+    } else {
+      // billProvider.saveBill();
+    }
   }
 }

@@ -26,53 +26,74 @@ class RegisterScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Padding(
-                padding: const EdgeInsets.all(22),
-                child: Form(
-                  key: _formKey,
-                  child: Consumer<RegisterProvider>(
-                    builder: (context, registerProvider, child) => Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        const Text(
-                          'Cadastre-se no',
-                          style: TextStyle(fontSize: 30),
-                          textAlign: TextAlign.center,
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.all(22),
+                    child: Form(
+                      key: _formKey,
+                      child: Consumer<RegisterProvider>(
+                        builder: (context, registerProvider, child) => Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            const Text(
+                              'Cadastre-se no',
+                              style: TextStyle(fontSize: 30),
+                              textAlign: TextAlign.center,
+                            ),
+                            const Text(
+                              'Divide Aí',
+                              style: TextStyle(
+                                fontSize: 30,
+                                height: 1.3,
+                                fontWeight: FontWeight.bold,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            DefaultTextFormField(
+                              validator: registerProvider.validateEmail,
+                              onChanged: (text) {
+                                _formKey.currentState?.validate();
+                                registerProvider.setEmail(text);
+                              },
+                              keyboardType: TextInputType.emailAddress,
+                              labelText: 'E-mail',
+                              value: registerProvider.email ?? '',
+                            ),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            DefaultTextFormField(
+                              validator: registerProvider.validatePassword,
+                              onChanged: (text) {
+                                _formKey.currentState?.validate();
+                                registerProvider.setPassword(text);
+                              },
+                              obscureText: true,
+                              labelText: 'Senha',
+                              value: registerProvider.password ?? '',
+                            ),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            DefaultTextFormField(
+                              validator:
+                                  registerProvider.validatePasswordConfirmation,
+                              onChanged: (text) {
+                                _formKey.currentState?.validate();
+                                registerProvider.setPasswordConfirmation(text);
+                              },
+                              obscureText: true,
+                              labelText: 'Confirmar senha',
+                              value:
+                                  registerProvider.passwordConfirmation ?? '',
+                            )
+                          ],
                         ),
-                        const Text(
-                          'Divide Aí',
-                          style: TextStyle(
-                            fontSize: 30,
-                            height: 1.3,
-                            fontWeight: FontWeight.bold,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                        const SizedBox(
-                          height: 30,
-                        ),
-                        DefaultTextFormField(
-                          validator: registerProvider.validateEmail,
-                          onChanged: (text) {
-                            _formKey.currentState?.validate();
-                            registerProvider.setEmail(text);
-                          },
-                          keyboardType: TextInputType.emailAddress,
-                          hintText: 'E-mail',
-                        ),
-                        const SizedBox(
-                          height: 20,
-                        ),
-                        DefaultTextFormField(
-                          validator: registerProvider.validatePassword,
-                          onChanged: (text) {
-                            _formKey.currentState?.validate();
-                            registerProvider.setPassword(text);
-                          },
-                          obscureText: true,
-                          hintText: 'Senha',
-                        ),
-                      ],
+                      ),
                     ),
                   ),
                 ),
@@ -116,12 +137,17 @@ class RegisterScreen extends StatelessWidget {
                       ),
                       Expanded(
                         flex: 1,
-                        child: Consumer2<RegisterProvider, AuthenticationProvider>(
-                          builder: (context, registerProvider, authenticationProvider, child) {
+                        child:
+                            Consumer2<RegisterProvider, AuthenticationProvider>(
+                          builder: (
+                            context,
+                            registerProvider,
+                            authenticationProvider,
+                            child,
+                          ) {
                             return InkWell(
                               onTap: () {
-                                if (registerProvider.isEmailValid &&
-                                    registerProvider.isPasswordValid) {
+                                if (registerProvider.isFormValid) {
                                   Provider.of<AuthenticationProvider>(
                                     context,
                                     listen: false,
@@ -145,7 +171,7 @@ class RegisterScreen extends StatelessWidget {
                                 ),
                               ),
                             );
-                          }
+                          },
                         ),
                       ),
                     ],

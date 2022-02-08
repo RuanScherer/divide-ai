@@ -60,7 +60,8 @@ class EmailAndPasswordSignInScreen extends StatelessWidget {
                             emailAndPasswordSignInProvider.setEmail(text);
                           },
                           keyboardType: TextInputType.emailAddress,
-                          hintText: 'E-mail',
+                          labelText: 'E-mail',
+                          value: emailAndPasswordSignInProvider.email ?? '',
                         ),
                         const SizedBox(
                           height: 20,
@@ -73,7 +74,8 @@ class EmailAndPasswordSignInScreen extends StatelessWidget {
                           },
                           autofocus: false,
                           obscureText: true,
-                          hintText: 'Senha',
+                          labelText: 'Senha',
+                          value: emailAndPasswordSignInProvider.password ?? '',
                         ),
                       ],
                     ),

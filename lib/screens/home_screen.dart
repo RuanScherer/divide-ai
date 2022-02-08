@@ -1,6 +1,7 @@
 import 'package:divide_ai/enums/transaction_type_enum.dart';
 import 'package:divide_ai/providers/authentication_provider.dart';
 import 'package:divide_ai/screens/new_bill_screen.dart';
+import 'package:divide_ai/widgets/default_button.dart';
 import 'package:divide_ai/widgets/status_card.dart';
 import 'package:divide_ai/widgets/transaction_tile.dart';
 import 'package:flutter/material.dart';
@@ -47,9 +48,7 @@ class HomeScreen extends StatelessWidget {
                               ),
                             ),
                             Text(
-                              authentication
-                                      .currentUser!.firebaseUser.displayName ??
-                                  '@${authentication.currentUser!.username ?? ''}',
+                              authentication.currentUser!.name!,
                               style: const TextStyle(
                                 fontSize: 24,
                                 fontWeight: FontWeight.bold,
@@ -96,7 +95,7 @@ class HomeScreen extends StatelessWidget {
               const SizedBox(
                 height: 10,
               ),
-              TextButton(
+              DefaultButton(
                 onPressed: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
@@ -104,38 +103,13 @@ class HomeScreen extends StatelessWidget {
                     ),
                   );
                 },
-                style: ButtonStyle(
-                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                    RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(14),
-                    ),
-                  ),
-                  backgroundColor:
-                      MaterialStateProperty.all<Color>(Colors.grey[200]!),
-                  overlayColor:
-                      MaterialStateProperty.all<Color>(Colors.grey[300]!),
+                backgroundColor: Colors.grey[200],
+                overlayColor: Colors.grey[300],
+                leading: const Icon(
+                  Icons.add,
+                  color: Colors.black,
                 ),
-                child: Container(
-                  padding: const EdgeInsets.all(4),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: const [
-                      Icon(
-                        Icons.add,
-                        color: Colors.black,
-                      ),
-                      Text(
-                        'Dividir nova conta',
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+                text: 'Dividir nova conta',
               ),
               const SizedBox(
                 height: 26,

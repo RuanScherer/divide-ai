@@ -139,7 +139,7 @@ class LoginScreen extends StatelessWidget {
               DefaultButton(
                 text: 'Entrar com Google',
                 textStyle: const TextStyle(
-                  fontSize: 18,
+                  fontSize: 16,
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
                 ),
@@ -172,7 +172,7 @@ class LoginScreen extends StatelessWidget {
               DefaultButton(
                 text: 'Cadastre-se',
                 textStyle: const TextStyle(
-                  fontSize: 18,
+                  fontSize: 16,
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
                 ),

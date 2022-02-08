@@ -37,10 +37,11 @@ class DefaultButton extends StatelessWidget {
       ),
       child: Container(
         padding: const EdgeInsets.symmetric(
-          vertical: 8,
-          horizontal: 12,
+          vertical: 5,
+          horizontal: 5,
         ),
         child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             if (leading != null) ...[
@@ -49,15 +50,16 @@ class DefaultButton extends StatelessWidget {
             const SizedBox(
               width: 10,
             ),
-            Expanded(
-              child: Text(
-                text,
-                style: textStyle ?? const TextStyle(
-                  fontSize: 18,
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold,
-                ),
+            Text(
+              text,
+              style: textStyle ?? const TextStyle(
+                fontSize: 16,
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
               ),
+            ),
+            const SizedBox(
+              width: 10,
             ),
             if (trailing != null) ...[
               trailing!

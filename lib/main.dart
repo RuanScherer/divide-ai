@@ -27,9 +27,23 @@ void main() async {
         primaryColor: const Color(0xFF00E4A7),
         accentColor: const Color(0xFF00E4A7),
         textTheme: GoogleFonts.nunitoTextTheme(),
+        textSelectionTheme: const TextSelectionThemeData(
+          cursorColor: Color(0xFF00E4A7),
+        ),
+        progressIndicatorTheme: const ProgressIndicatorThemeData(
+          color: Color(0xFF00E4A7),
+        ),
         appBarTheme: const AppBarTheme(
+          color: Colors.white,
+          foregroundColor: Colors.white,
+          elevation: 0,
           iconTheme: IconThemeData(
             color: Color(0xFF00E4A7),
+          ),
+        ),
+        inputDecorationTheme: const InputDecorationTheme(
+          floatingLabelStyle: TextStyle(
+            color: Colors.black,
           ),
         ),
       ),
